@@ -60,7 +60,7 @@
     .carousel-viewport{overflow:hidden;border-radius:28px;touch-action:pan-y}
     .carousel-track{display:flex;gap:20px;will-change:transform;transition:transform .8s var(--ease)}
     .carousel-card{flex:0 0 calc((100% - 40px)/3);min-width:0;border:1px solid var(--line);border-radius:24px;overflow:hidden;background:#fff;box-shadow:0 18px 50px rgba(16,24,40,.08);user-select:none}
-    .product-visual{width:100%;aspect-ratio:3/4;background:#f5f7fa center/contain no-repeat;border-bottom:1px solid var(--line);position:relative}.product-visual::after{content:"Imagem do produto";position:absolute;inset:auto 0 18px;text-align:center;color:#98a2b3;font-size:.8rem;font-weight:700;letter-spacing:.04em}
+    .product-visual{width:100%;aspect-ratio:3/4;background:#f5f7fa center/contain no-repeat;border-bottom:1px solid var(--line)}
     .carousel-meta{padding:18px 20px 20px;display:flex;align-items:center;justify-content:space-between;gap:14px}
     .carousel-meta strong{font-size:1rem}.carousel-meta span{color:var(--muted);font-size:.84rem}
     .carousel-actions{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:24px}
@@ -133,13 +133,13 @@
           <div class="carousel-shell">
             <div class="carousel-viewport">
               <div class="carousel-track">
-                <article class="carousel-card" tabindex="0"><div class="product-visual" data-sprite="0" role="img" aria-label="Embalagem personalizada Setor Plast de 25 quilos"></div><div class="carousel-meta"><strong>Embalagem personalizada</strong><span>Grande formato</span></div></article>
-                <article class="carousel-card" tabindex="0"><div class="product-visual" data-sprite="1" role="img" aria-label="Embalagem transparente com fecho azul e identidade Setor Plast"></div><div class="carousel-meta"><strong>Transparente personalizada</strong><span>Fecho zip</span></div></article>
-                <article class="carousel-card" tabindex="0"><div class="product-visual" data-sprite="2" role="img" aria-label="Embalagem transparente com fecho azul"></div><div class="carousel-meta"><strong>Embalagem transparente</strong><span>Visual limpo</span></div></article>
-                <article class="carousel-card" tabindex="0"><div class="product-visual" data-sprite="3" role="img" aria-label="Embalagem impressa Produtos da Casa"></div><div class="carousel-meta"><strong>Impressão personalizada</strong><span>Identidade completa</span></div></article>
-                <article class="carousel-card" tabindex="0"><div class="product-visual" data-sprite="4" role="img" aria-label="Embalagem personalizada para produto de cana-de-açúcar"></div><div class="carousel-meta"><strong>Embalagem para alimentos</strong><span>Personalizada</span></div></article>
-                <article class="carousel-card" tabindex="0"><div class="product-visual" data-sprite="5" role="img" aria-label="Embalagem personalizada para gelo em cubos"></div><div class="carousel-meta"><strong>Sacola para gelo</strong><span>Alça integrada</span></div></article>
-                <article class="carousel-card" tabindex="0"><div class="product-visual" data-sprite="6" role="img" aria-label="Sacola preta com alça e marca Setor Plast"></div><div class="carousel-meta"><strong>Sacola com alça</strong><span>Acabamento personalizado</span></div></article>
+                <article class="carousel-card" tabindex="0"><div class="product-visual" role="img" aria-label="Embalagem personalizada Setor Plast de 25 quilos" style="background-image:url('assets/products/ChatGPT%20Image%2028%20de%20jul.%20de%202026%2C%2022_40_52.png')"></div><div class="carousel-meta"><strong>Embalagem personalizada</strong><span>Grande formato</span></div></article>
+                <article class="carousel-card" tabindex="0"><div class="product-visual" role="img" aria-label="Embalagem transparente com fecho azul e identidade Setor Plast" style="background-image:url('assets/products/ChatGPT%20Image%2028%20de%20jul.%20de%202026%2C%2023_20_14.png')"></div><div class="carousel-meta"><strong>Transparente personalizada</strong><span>Fecho zip</span></div></article>
+                <article class="carousel-card" tabindex="0"><div class="product-visual" role="img" aria-label="Embalagem transparente com fecho azul" style="background-image:url('assets/products/ChatGPT%20Image%2028%20de%20jul.%20de%202026%2C%2023_36_49.png')"></div><div class="carousel-meta"><strong>Embalagem transparente</strong><span>Visual limpo</span></div></article>
+                <article class="carousel-card" tabindex="0"><div class="product-visual" role="img" aria-label="Embalagem impressa Produtos da Casa" style="background-image:url('assets/products/ChatGPT%20Image%2028%20de%20jul.%20de%202026%2C%2023_38_04.png')"></div><div class="carousel-meta"><strong>Impressão personalizada</strong><span>Identidade completa</span></div></article>
+                <article class="carousel-card" tabindex="0"><div class="product-visual" role="img" aria-label="Embalagem personalizada para produto de cana-de-açúcar" style="background-image:url('assets/products/ChatGPT%20Image%2028%20de%20jul.%20de%202026%2C%2023_39_47.png')"></div><div class="carousel-meta"><strong>Embalagem para alimentos</strong><span>Personalizada</span></div></article>
+                <article class="carousel-card" tabindex="0"><div class="product-visual" role="img" aria-label="Embalagem personalizada para gelo em cubos" style="background-image:url('assets/products/ChatGPT%20Image%2028%20de%20jul.%20de%202026%2C%2023_44_18.png')"></div><div class="carousel-meta"><strong>Sacola para gelo</strong><span>Alça integrada</span></div></article>
+                <article class="carousel-card" tabindex="0"><div class="product-visual" role="img" aria-label="Sacola preta com alça e marca Setor Plast" style="background-image:url('assets/products/ChatGPT%20Image%2023%20de%20jul.%20de%202026%2C%2016_22_17.png')"></div><div class="carousel-meta"><strong>Sacola com alça</strong><span>Acabamento personalizado</span></div></article>
               </div>
             </div>
           </div>
@@ -256,8 +256,7 @@
       const next=carousel.querySelector('.carousel-next');
       let index=0, timer=null, pointerStart=null, pointerDelta=0;
 
-      // Imagens temporariamente sem sprite para evitar artefatos de compressão.
-      // Os arquivos finais serão usados individualmente em /assets/products/.
+
 
       cards.forEach((_,i)=>{
         const dot=document.createElement('button');
