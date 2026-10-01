@@ -43,7 +43,7 @@
     .hero h1 .accent{color:var(--red)}
     .hero-copy p{font-size:clamp(1.05rem,1.5vw,1.28rem);color:#667085;max-width:720px;margin:0 0 30px}
     .hero-actions{display:flex;gap:12px;flex-wrap:wrap}.micro{font-size:.84rem;color:#7b8794;margin-top:14px}
-    .proof{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin:48px auto 0;text-align:center;align-items:start;justify-items:center;width:100%}
+    .proof{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin:20px auto 0;text-align:center;align-items:start;justify-items:center;width:min(100%,980px)}
     .proof-item{padding:22px 18px;border-top:1px solid var(--line);width:100%}.proof-item strong{display:block;font-size:1.25rem}.proof-item span{color:var(--muted);font-size:.88rem}
     .hero-media{position:relative;min-height:690px}
     .frame{position:absolute;inset:0;border-radius:34px;overflow:hidden;border:1px solid var(--line);box-shadow:var(--shadow);background:#0d2033}
@@ -108,16 +108,17 @@
             <a class="btn btn-ghost" href="#producao">Conhecer a produção</a>
           </div>
           <div class="micro">Atendimento direto pelo WhatsApp • Orçamento sem compromisso</div>
-          <div class="proof">
-            <div class="proof-item"><strong>5+ anos</strong><span>de mercado</span></div>
-            <div class="proof-item"><strong>Milhões</strong><span>de embalagens produzidas</span></div>
-            <div class="proof-item"><strong>Caruaru • PE</strong><span>produção própria</span></div>
-          </div>
+
         </div>
         <div class="hero-media reveal">
           <div class="frame"><img src="assets/fabrica-02.jpg" alt="Linha de produção da Setor Plast em Caruaru"></div>
           <div class="floating"><small>Foco</small><strong>Marca + produto</strong></div>
           <div class="media-badge"><strong>Produção que você pode ver.</strong><span>Estrutura real, fabricação própria.</span></div>
+        </div>
+        <div class="proof">
+          <div class="proof-item"><strong>5+ anos</strong><span>de mercado</span></div>
+          <div class="proof-item"><strong>Milhões</strong><span>de embalagens produzidas</span></div>
+          <div class="proof-item"><strong>Caruaru • PE</strong><span>produção própria</span></div>
         </div>
       </div>
     </section>
