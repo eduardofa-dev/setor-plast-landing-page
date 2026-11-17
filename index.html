@@ -67,12 +67,14 @@
     .strip b{color:#101828;font-weight:800}
     .product-carousel{margin-top:44px;position:relative}
     .carousel-shell{position:relative}
-    .carousel-viewport{overflow:hidden;border-radius:24px;touch-action:pan-y;padding:6px 5px 28px;margin:-6px -5px -28px}
-    .carousel-track{display:flex;gap:20px;will-change:transform;transition:transform .65s var(--ease)}
+    .carousel-viewport{overflow:hidden;border-radius:24px;touch-action:pan-y;cursor:grab;padding:6px 5px 28px;margin:-6px -5px -28px}
+    .carousel-viewport.is-dragging{cursor:grabbing}
+    .carousel-track{display:flex;gap:20px;will-change:transform;transition:transform .85s cubic-bezier(.22,1,.36,1)}
     .carousel-card{position:relative;display:flex;flex-direction:column;flex:0 0 calc((100% - 40px)/3);min-width:0;isolation:isolate;border:1px solid rgba(11,47,158,.11);border-radius:24px;overflow:hidden;background:#fff;box-shadow:0 12px 32px rgba(16,24,40,.065);user-select:none;transition:border-color .3s,box-shadow .3s,transform .3s}
     .carousel-card:hover{transform:translateY(-4px);border-color:rgba(11,47,158,.23);box-shadow:0 20px 42px rgba(16,24,40,.11)}
     .carousel-card::before{content:attr(data-counter);position:absolute;top:16px;left:16px;z-index:1;padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.92);border:1px solid rgba(11,47,158,.08);color:var(--blue);font-size:.68rem;font-weight:800;letter-spacing:.09em;pointer-events:none}
-    .product-visual{width:100%;aspect-ratio:4/4.5;background-color:#f5f7fb;background-position:center;background-size:contain;background-repeat:no-repeat;border-bottom:1px solid rgba(11,47,158,.07)}
+    .product-visual{width:100%;aspect-ratio:4/4.5;background-color:#f5f7fb;background-position:center;background-size:contain;background-repeat:no-repeat;border-bottom:1px solid rgba(11,47,158,.07);transition:transform .8s cubic-bezier(.22,1,.36,1)}
+    .carousel-card:hover .product-visual{transform:scale(1.025)}
     .carousel-meta{padding:20px 20px 12px;display:flex;align-items:flex-start;flex-direction:column;gap:6px;flex:1}
     .carousel-meta strong{font-size:1.08rem;line-height:1.28;letter-spacing:-.018em;color:#111827}
     .carousel-meta span{color:var(--muted);font-size:.86rem}
@@ -327,7 +329,8 @@
     if(carousel){
       const track=carousel.querySelector('.carousel-track');
       const viewport=carousel.querySelector('.carousel-viewport');
-      const cards=[...carousel.querySelectorAll('.carousel-card')];
+      const originals=[...track.querySelectorAll('.carousel-card')];
+      const total=originals.length;
       const dotsWrap=carousel.querySelector('.carousel-dots');
       const prev=carousel.querySelector('.carousel-prev');
       const next=carousel.querySelector('.carousel-next');
@@ -335,14 +338,14 @@
       const currentLabel=carousel.querySelector('.carousel-current');
       const totalLabel=carousel.querySelector('.carousel-total');
       const progress=carousel.querySelector('.carousel-progress span');
-      let index=0, timer=null, pointerStart=null, pointerDelta=0;
+      let index=0, physicalIndex=total, timer=null, dragging=null, animating=false, queued=null;
       let visible=false, hovering=false, focused=false, manuallyPaused=false;
 
-      cards.forEach((card,i)=>{
-        card.dataset.counter=String(i+1).padStart(2,'0')+' / '+String(cards.length).padStart(2,'0');
+      originals.forEach((card,i)=>{
+        card.dataset.counter=String(i+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');
         card.removeAttribute('tabindex');
         const name=card.querySelector('.carousel-meta strong')?.textContent.trim();
-        if(!name) return;
+        if(!name)return;
         const link=document.createElement('a');
         link.className='carousel-product-link';
         link.href='https://wa.me/5581998383281?text='+encodeURIComponent('Olá Setor Plast, gostaria de um orçamento para '+name+'.');
@@ -353,66 +356,104 @@
         card.appendChild(link);
       });
 
+      // Repetições nas extremidades permitem a volta do último ao primeiro sem salto.
+      const before=originals.map(card=>card.cloneNode(true));
+      const after=originals.map(card=>card.cloneNode(true));
+      track.prepend(...before);
+      track.append(...after);
+      const allCards=[...track.querySelectorAll('.carousel-card')];
+
       function visibleCount(){
-        if(innerWidth<=640) return 1;
-        if(innerWidth<=980) return 2;
+        if(innerWidth<=640)return 1;
+        if(innerWidth<=980)return 2;
         return 3;
       }
-      function maxIndex(){return Math.max(0,cards.length-visibleCount());}
       function cardStep(){
-        if(!cards.length) return 0;
-        return cards[0].getBoundingClientRect().width+(parseFloat(getComputedStyle(track).gap)||0);
+        return originals[0].getBoundingClientRect().width+
+          (parseFloat(getComputedStyle(track).gap)||0);
       }
-      function updateDots(){
-        const total=maxIndex()+1;
-        if(dotsWrap.children.length!==total){
-          dotsWrap.replaceChildren();
-          for(let i=0;i<total;i++){
-            const dot=document.createElement('button');
-            dot.type='button';
-            dot.className='carousel-dot';
-            dot.setAttribute('aria-label','Ver grupo de produtos '+(i+1)+' de '+total);
-            dot.addEventListener('click',()=>go(i,true));
-            dotsWrap.appendChild(dot);
-          }
-        }
+      function offset(){return -physicalIndex*cardStep();}
+      function normalize(){
+        physicalIndex=total+index;
+        track.style.transition='none';
+        track.style.transform='translate3d('+offset()+'px,0,0)';
+        // Aplicar a posição equivalente antes de reativar a transição.
+        void track.offsetWidth;
+        track.style.transition='';
+      }
+      function updateUI(){
+        currentLabel.textContent=String(index+1).padStart(2,'0');
+        totalLabel.textContent=String(total).padStart(2,'0');
+        progress.style.width=((index+1)/total*100)+'%';
         [...dotsWrap.children].forEach((dot,i)=>{
           const active=i===index;
           dot.classList.toggle('active',active);
           dot.setAttribute('aria-current',active?'true':'false');
         });
-      }
-      function update(){
-        index=Math.max(0,Math.min(index,maxIndex()));
-        track.style.transform='translate3d('+(-index*cardStep())+'px,0,0)';
-        const total=maxIndex()+1;
-        currentLabel.textContent=String(index+1).padStart(2,'0');
-        totalLabel.textContent=String(total).padStart(2,'0');
-        progress.style.width=((index+1)/total*100)+'%';
-        cards.forEach((card,i)=>{
-          const showing=i>=index&&i<index+visibleCount();
+        const count=visibleCount();
+        allCards.forEach((card,i)=>{
+          const showing=i>=physicalIndex&&i<physicalIndex+count;
           card.setAttribute('aria-hidden',showing?'false':'true');
           const link=card.querySelector('.carousel-product-link');
-          if(link) link.tabIndex=showing?0:-1;
+          if(link)link.tabIndex=showing?0:-1;
         });
-        updateDots();
       }
       function stopAuto(){clearInterval(timer);timer=null;}
       function restartAuto(){
         stopAuto();
-        if(!reduceMotion&&!manuallyPaused&&visible&&!hovering&&!focused&&!document.hidden&&maxIndex()>0){
-          timer=setInterval(()=>go(index+1),6500);
+        if(!reduceMotion&&!manuallyPaused&&visible&&!hovering&&!focused&&!document.hidden&&total>1){
+          timer=setInterval(()=>moveBy(1),6500);
         }
       }
-      function go(i,userAction=false){
-        const max=maxIndex();
-        index=i>max?0:i<0?max:i;
-        update();
+      function moveBy(delta,userAction=false){
+        if(!total||!delta)return;
+        if(animating){
+          queued={type:'delta',value:delta,userAction};
+          if(userAction)restartAuto();
+          return;
+        }
+        index=((index+delta)%total+total)%total;
+        physicalIndex+=delta;
+        animating=!reduceMotion;
+        track.style.transform='translate3d('+offset()+'px,0,0)';
+        if(reduceMotion)normalize();
+        updateUI();
         if(userAction)restartAuto();
       }
+      function go(target,userAction=false){
+        const forward=(target-index+total)%total;
+        const delta=forward>total/2?forward-total:forward;
+        if(!delta)return;
+        if(animating){
+          queued={type:'target',value:target,userAction};
+          if(userAction)restartAuto();
+          return;
+        }
+        moveBy(delta,userAction);
+      }
 
-      prev.addEventListener('click',()=>go(index-1,true));
-      next.addEventListener('click',()=>go(index+1,true));
+      for(let i=0;i<total;i++){
+        const dot=document.createElement('button');
+        dot.type='button';
+        dot.className='carousel-dot';
+        dot.setAttribute('aria-label','Ver produto '+(i+1)+' de '+total);
+        dot.addEventListener('click',()=>go(i,true));
+        dotsWrap.appendChild(dot);
+      }
+      track.addEventListener('transitionend',event=>{
+        if(event.target!==track||event.propertyName!=='transform'||!animating)return;
+        animating=false;
+        normalize();
+        updateUI();
+        if(queued){
+          const pending=queued;
+          queued=null;
+          if(pending.type==='target')go(pending.value,pending.userAction);
+          else moveBy(pending.value,pending.userAction);
+        }
+      });
+      prev.addEventListener('click',()=>moveBy(-1,true));
+      next.addEventListener('click',()=>moveBy(1,true));
       toggle.addEventListener('click',()=>{
         manuallyPaused=!manuallyPaused;
         toggle.textContent=manuallyPaused?'▶':'Ⅱ';
@@ -420,9 +461,15 @@
         toggle.setAttribute('aria-pressed',manuallyPaused?'true':'false');
         restartAuto();
       });
-      if(reduceMotion){toggle.hidden=true;}
+      if(reduceMotion)toggle.hidden=true;
 
-      addEventListener('resize',()=>{update();restartAuto();},{passive:true});
+      addEventListener('resize',()=>{
+        animating=false;
+        queued=null;
+        normalize();
+        updateUI();
+        restartAuto();
+      },{passive:true});
       document.addEventListener('visibilitychange',restartAuto);
       carousel.addEventListener('mouseenter',()=>{hovering=true;stopAuto();});
       carousel.addEventListener('mouseleave',()=>{hovering=false;restartAuto();});
@@ -433,26 +480,55 @@
       carousel.addEventListener('keydown',event=>{
         if(event.key==='ArrowLeft'||event.key==='ArrowRight'){
           event.preventDefault();
-          go(index+(event.key==='ArrowRight'?1:-1),true);
+          moveBy(event.key==='ArrowRight'?1:-1,true);
         }
       });
 
+      // O conjunto acompanha o dedo/mouse; ao soltar, desliza suavemente até o card.
       viewport.addEventListener('pointerdown',event=>{
-        if(event.button!==0||event.target.closest('a'))return;
-        pointerStart=event.clientX;
-        pointerDelta=0;
+        if(animating||event.button!==0||event.target.closest('a'))return;
+        dragging={id:event.pointerId,x:event.clientX,y:event.clientY,delta:0};
+        stopAuto();
       });
       viewport.addEventListener('pointermove',event=>{
-        if(pointerStart!==null)pointerDelta=event.clientX-pointerStart;
+        if(!dragging||dragging.id!==event.pointerId)return;
+        const dx=event.clientX-dragging.x;
+        const dy=event.clientY-dragging.y;
+        if(Math.abs(dy)>Math.abs(dx)&&Math.abs(dy)>12&&!viewport.classList.contains('is-dragging')){
+          dragging=null;
+          restartAuto();
+          return;
+        }
+        if(Math.abs(dx)>6||viewport.classList.contains('is-dragging')){
+          dragging.delta=dx;
+          viewport.classList.add('is-dragging');
+          track.style.transition='none';
+          track.style.transform='translate3d('+(offset()+dx)+'px,0,0)';
+        }
       });
-      function finishSwipe(){
-        if(pointerStart===null)return;
-        if(Math.abs(pointerDelta)>45)go(index+(pointerDelta<0?1:-1),true);
-        pointerStart=null;pointerDelta=0;
+      function finishSwipe(event,canceled=false){
+        if(!dragging||dragging.id!==event.pointerId)return;
+        const delta=dragging.delta;
+        dragging=null;
+        viewport.classList.remove('is-dragging');
+        if(Math.abs(delta)>0){
+          // Registrar a posição arrastada para a animação começar dali.
+          void track.offsetWidth;
+          track.style.transition='';
+        }
+        if(!canceled&&Math.abs(delta)>Math.min(65,cardStep()*.17)){
+          moveBy(delta<0?1:-1,true);
+        }else{
+          // Voltar delicadamente quando o gesto não avançar o produto.
+          track.style.transform='translate3d('+offset()+'px,0,0)';
+          restartAuto();
+        }
       }
-      viewport.addEventListener('pointerup',finishSwipe);
-      viewport.addEventListener('pointercancel',()=>{pointerStart=null;pointerDelta=0;});
-      viewport.addEventListener('pointerleave',()=>{pointerStart=null;pointerDelta=0;});
+      viewport.addEventListener('pointerup',event=>finishSwipe(event));
+      viewport.addEventListener('pointercancel',event=>finishSwipe(event,true));
+      viewport.addEventListener('pointerleave',event=>{
+        if(event.pointerType==='mouse')finishSwipe(event);
+      });
 
       if('IntersectionObserver' in window){
         const carouselObserver=new IntersectionObserver(entries=>{
@@ -461,7 +537,8 @@
         },{threshold:.2});
         carouselObserver.observe(carousel);
       }else{visible=true;}
-      update();
+      normalize();
+      updateUI();
       restartAuto();
     }
 
