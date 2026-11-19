@@ -6,6 +6,14 @@
   <title>Setor Plast</title>
   <meta name="description" content="Embalagens plásticas transparentes e personalizadas, com produção própria em Caruaru-PE. Fale com a Setor Plast e solicite seu orçamento." />
   <meta name="theme-color" content="#ffffff" />
+  <script>
+    try {
+      if(localStorage.getItem('setorplast-theme')==='dark'){
+        document.documentElement.setAttribute('data-theme','dark');
+        document.querySelector('meta[name="theme-color"]').setAttribute('content','#0b1220');
+      }
+    }catch(_){}
+  </script>
   <link rel="icon" type="image/svg+xml" href="assets/icons/favicon.svg" />
   <meta property="og:title" content="Setor Plast | Embalagens Plásticas Personalizadas" />
   <meta property="og:description" content="Produção própria, personalização e preço competitivo para valorizar seu produto." />
@@ -33,6 +41,18 @@
     .brand{display:flex;align-items:center}
     .brand-logo{width:148px;height:auto;display:block}
     .nav.scrolled .brand-logo{width:138px}
+    .brand-logo-dark{display:none}
+    html[data-theme="dark"] .brand-logo-light{display:none}
+    html[data-theme="dark"] .brand-logo-dark{display:block}
+    .nav-actions{display:flex;align-items:center;gap:12px;flex-shrink:0}
+    .theme-toggle{width:46px;height:46px;flex-shrink:0;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.88);color:#16346f;display:grid;place-items:center;cursor:pointer;transition:transform .2s,background-color .25s,color .25s,border-color .25s}
+    .theme-toggle:hover{transform:translateY(-2px);background:#edf3ff}
+    .theme-toggle:focus-visible{outline:3px solid var(--blue-2);outline-offset:3px}
+    .theme-icon{grid-area:1/1}
+    .theme-sun{display:none}
+    html[data-theme="dark"] .theme-moon{display:none}
+    html[data-theme="dark"] .theme-sun{display:block}
+    .nav-cta-short{display:none}
     .nav-links{display:flex;align-items:center;gap:30px;color:#475467;font-size:.95rem}.nav-links a:hover{color:#101828}
     .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 22px;border-radius:14px;font-weight:800;border:1px solid transparent;transition:.25s var(--ease);cursor:pointer}
     .btn-primary{background:var(--red);color:#fff;box-shadow:0 12px 32px rgba(255,23,46,.25)}.btn-primary:hover{background:var(--red-2);transform:translateY(-2px)}
@@ -119,12 +139,79 @@
     .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:48px}.step{padding:28px;border-top:1px solid var(--line);background:linear-gradient(180deg,rgba(17,24,39,.025),transparent)}.step-num{color:var(--red);font-weight:900;font-size:2.2rem}.step h3{font-size:1.25rem}.step p{color:var(--muted);font-size:.94rem}
     .cta{padding-top:80px}.cta-box{padding:70px;border-radius:32px;border:1px solid rgba(255,255,255,.12);background:linear-gradient(135deg,#f8fafc 0%,#ffffff 58%,#f4f6f8 100%);position:relative;overflow:hidden}.cta-box::after{content:"";position:absolute;width:320px;height:320px;border-radius:50%;right:-100px;top:-110px;background:radial-gradient(circle,rgba(255,23,46,.26),transparent 66%)}.cta-box h2{font-size:clamp(2.8rem,5.5vw,5.5rem);line-height:.96;letter-spacing:-.045em;margin:10px 0 24px;max-width:900px}.cta-box p{color:#667085;max-width:680px;font-size:1.08rem}
     footer{padding:54px 0 34px;border-top:1px solid var(--line);margin-top:110px;color:#667085}.footer-inner{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}.footer-brand{color:#101828;font-weight:900}
+    .footer-link{color:#101828}
     .whatsapp{position:fixed;right:22px;bottom:22px;z-index:40;width:58px;height:58px;border-radius:18px;background:#21c063;color:white;display:grid;place-items:center;font-weight:900;box-shadow:0 18px 42px rgba(0,0,0,.28)}
     .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s var(--ease),transform .8s var(--ease)}.reveal.in{opacity:1;transform:none}
     .section-reveal{opacity:0;filter:blur(14px);transform:translateY(44px) scale(.985);transition:opacity 1s var(--ease),filter 1s var(--ease),transform 1s var(--ease);will-change:opacity,filter,transform}.section-reveal.in{opacity:1;filter:blur(0);transform:translateY(0) scale(1)}
     @media(max-width:980px){.location-grid{grid-template-columns:1fr}.location-copy{padding-right:0}.factory-gallery-grid{grid-template-columns:1fr}.gallery-main,.gallery-side{min-height:420px}.nav-inner{height:82px}.nav-links{display:none}.hero{padding:118px 0 56px;min-height:auto}.hero-grid,.factory-grid{grid-template-columns:1fr}.hero-copy{max-width:760px}.hero-media{min-height:520px}.floating{right:14px}.steps{grid-template-columns:repeat(2,1fr)}.carousel-card{flex-basis:calc((100% - 20px)/2)}.factory-photo{min-height:520px}.cta-box{padding:52px}.section-title{max-width:820px}}
     @media(max-width:640px){.location{width:100%;max-width:100%;overflow:hidden}.location-grid{display:block;width:100%;max-width:100%}.location-copy,.location-card,.map-embed{width:100%;max-width:100%;min-width:0}.location-card{min-height:320px;padding:24px;border-radius:20px}.location-card .btn{width:100%;max-width:100%;padding-inline:14px;white-space:normal;text-align:center}.location-copy{padding:0}.location{padding-block:72px}.factory-gallery{padding-top:20px}.gallery-main,.gallery-side{min-height:300px;border-radius:20px}.container{width:min(calc(100% - 24px),var(--max))}.nav{background:rgba(255,255,255,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.nav-inner{height:72px}.nav.scrolled .nav-inner{height:68px}.brand-logo{width:116px}.nav .btn{display:inline-flex;min-height:42px;padding:0 14px;border-radius:12px;font-size:.82rem}.hero{padding:98px 0 40px;min-height:auto}.hero-grid{gap:28px}.hero h1{font-size:clamp(2.65rem,14.4vw,4rem);line-height:.94;letter-spacing:-.05em;margin:10px 0 20px}.hero-copy p{font-size:1rem;line-height:1.65;margin-bottom:24px}.hero-actions{gap:10px}.hero-actions .btn{width:100%;min-height:50px}.micro{text-align:center;font-size:.78rem}.proof{grid-template-columns:1fr;gap:0;margin-top:28px}.proof-item{padding:16px 8px}.proof-item:nth-child(3){grid-column:auto}.proof-item strong{font-size:1.18rem}.hero-media{min-height:360px;margin-top:4px}.floating{display:none}.frame{border-radius:20px}.media-badge{left:14px;right:14px;bottom:14px;padding:12px 14px;border-radius:14px}.media-badge strong{font-size:.95rem}.media-badge span{font-size:.78rem}.strip{padding:18px 0}.strip-inner{display:grid;grid-template-columns:1fr;gap:12px;text-align:left;font-size:.9rem}section{padding:72px 0}.section-title{font-size:clamp(2.25rem,11.5vw,3.4rem);line-height:1.02;margin:8px 0 16px}.section-sub{font-size:1rem;line-height:1.65}.product-carousel{margin-top:30px}.carousel-viewport{border-radius:20px}.carousel-track{gap:14px}.carousel-card{flex:0 0 86%;border-radius:20px}.carousel-meta{padding:16px 16px 10px}.carousel-product-link{margin:0 16px 17px;min-width:calc(100% - 32px)}.carousel-card::before{top:12px;left:12px}.carousel-actions{margin-top:18px;gap:12px}.carousel-pagination{width:100%}.carousel-dots{display:none}.carousel-toggle{width:34px;height:34px}.carousel-btn{width:44px;height:44px}.factory-grid{gap:24px}.factory-copy{padding:0}.factory-photo{min-height:360px;border-radius:20px}.steps{grid-template-columns:1fr;gap:10px;margin-top:30px}.step{padding:22px}.step-num{font-size:1.8rem}.cta{padding-top:56px}.cta-box{padding:30px 20px;border-radius:22px}.cta-box h2{font-size:clamp(2.3rem,11vw,3.6rem);margin-bottom:18px}.cta-box p{font-size:1rem;line-height:1.65}.cta-box .btn{width:100%}footer{margin-top:72px;padding:38px 0 28px}.footer-inner{display:grid;grid-template-columns:1fr;gap:18px;text-align:center}.whatsapp{right:14px;bottom:14px;width:54px;height:54px;border-radius:16px;font-size:.85rem}}
     @media(max-width:390px){.container{width:min(calc(100% - 20px),var(--max))}.brand-logo{width:104px}.nav .btn{padding:0 11px;font-size:.76rem}.hero{padding-top:92px}.hero h1{font-size:clamp(2.35rem,13vw,3.3rem)}.hero-media{min-height:320px}.carousel-card{flex-basis:88%}.section-title{font-size:clamp(2.05rem,10.8vw,3rem)}.cta-box{padding:26px 18px}}
+
+    /* Alternância de tema com contraste preservado e identidade Setor Plast. */
+    html[data-theme="dark"]{
+      color-scheme:dark;--bg:#0b1220;--bg-2:#111c2e;--surface:#172338;
+      --surface-2:#1e2c43;--text:#f1f5fe;--muted:#b6c2d4;
+      --line:rgba(205,220,245,.16);--blue:#8db3ff;--blue-2:#8fb6ff;
+      --red:#ff4861;--red-2:#ec3049;--shadow:0 24px 70px rgba(0,0,0,.28);
+    }
+    html[data-theme="dark"] body{background:radial-gradient(circle at 78% 8%,rgba(41,87,176,.16),transparent 32%),linear-gradient(180deg,#0b1220 0%,#101b2d 55%,#0b1220 100%);color:var(--text)}
+    html[data-theme="dark"] .nav{background:rgba(11,18,32,.81);border-bottom-color:var(--line);backdrop-filter:blur(18px)}
+    html[data-theme="dark"] .nav.scrolled{background:rgba(11,18,32,.94);border-color:var(--line);box-shadow:0 10px 32px rgba(0,0,0,.22)}
+    html[data-theme="dark"] .nav-links{color:#c8d2e4}
+    html[data-theme="dark"] .nav-links a:hover{color:#fff}
+    html[data-theme="dark"] .theme-toggle{background:#172740;color:#e6efff;border-color:rgba(205,220,245,.2)}
+    html[data-theme="dark"] .theme-toggle:hover{background:#223654}
+    html[data-theme="dark"] .btn-ghost{background:#17263d;color:#f1f5fe;border-color:var(--line)}
+    html[data-theme="dark"] .btn-ghost:hover{background:#263b56}
+    html[data-theme="dark"] .btn-primary{background:#e92c46;color:#fff}
+    html[data-theme="dark"] .btn-primary:hover{background:#fa3d57}
+    html[data-theme="dark"] .hero-copy p,html[data-theme="dark"] .micro{color:var(--muted)}
+    html[data-theme="dark"] .proof-item{border-top-color:var(--line)}
+    html[data-theme="dark"] .strip{background:linear-gradient(95deg,#101b2d 0%,#152238 50%,#101b2d 100%);border-color:var(--line)}
+    html[data-theme="dark"] .strip-inner{color:var(--muted)}
+    html[data-theme="dark"] .strip b{color:var(--text)}
+    html[data-theme="dark"] .carousel-card{background:#172338;border-color:var(--line);box-shadow:0 12px 35px rgba(0,0,0,.2)}
+    html[data-theme="dark"] .carousel-card:hover{border-color:rgba(141,179,255,.38);box-shadow:0 22px 45px rgba(0,0,0,.3)}
+    html[data-theme="dark"] .carousel-meta strong{color:var(--text)}
+    html[data-theme="dark"] .carousel-card::before{background:rgba(17,30,50,.93);border-color:var(--line);color:#e2edff}
+    html[data-theme="dark"] .product-visual{background-color:#e9edf5}
+    html[data-theme="dark"] .carousel-product-link{color:#a7c5ff;border-top-color:var(--line)}
+    html[data-theme="dark"] .carousel-product-link:hover{color:#ff8291}
+    html[data-theme="dark"] .carousel-status{color:#adc9ff}
+    html[data-theme="dark"] .carousel-dot{background:#536783}
+    html[data-theme="dark"] .carousel-dot.active{background:#9abaff}
+    html[data-theme="dark"] .carousel-progress{background:#30415b}
+    html[data-theme="dark"] .carousel-btn{background:#192942;color:#e5eeff;border-color:var(--line)}
+    html[data-theme="dark"] .carousel-btn:hover{background:#28416a}
+    html[data-theme="dark"] .carousel-next{background:#2954ad;border-color:#386acb;color:#fff}
+    html[data-theme="dark"] .carousel-next:hover{background:#396ac6;color:#fff}
+    html[data-theme="dark"] .factory{background:#101b2d}
+    html[data-theme="dark"] .gallery-main,html[data-theme="dark"] .gallery-side{background:#1b2a41;border-color:var(--line)}
+    html[data-theme="dark"] .gallery-label{background:rgba(20,35,57,.92);color:var(--text)}
+    html[data-theme="dark"] .location{background:#111d30}
+    html[data-theme="dark"] .location-card{background:linear-gradient(145deg,#1d2b43,#142136);border-color:var(--line)}
+    html[data-theme="dark"] .location-pin{background:#2d55af;color:#fff}
+    html[data-theme="dark"] .location-chip{background:#20314c;color:#e8effc;border-color:var(--line)}
+    html[data-theme="dark"] .step{border-top-color:var(--line);background:linear-gradient(180deg,rgba(141,179,255,.06),transparent)}
+    html[data-theme="dark"] .cta-box{background:linear-gradient(135deg,#17243b 0%,#1b2a43 58%,#142237 100%);border-color:var(--line)}
+    html[data-theme="dark"] .cta-box p{color:var(--muted)}
+    html[data-theme="dark"] footer{color:var(--muted)}
+    html[data-theme="dark"] .footer-brand{color:var(--text)}
+    html[data-theme="dark"] .footer-link{color:#dce9ff}
+    @media(max-width:640px){
+      .nav-inner{gap:8px}
+      .nav-actions{gap:7px}
+      .nav-cta-full{display:none}
+      .nav-cta-short{display:inline}
+      .theme-toggle{width:40px;height:40px;border-radius:12px}
+      .nav.scrolled .brand-logo{width:116px}
+    }
+    @media(max-width:390px){
+      .nav.scrolled .brand-logo{width:100px}
+      .brand-logo{width:100px}
+      .nav-actions{gap:5px}
+      .theme-toggle{width:38px;height:38px}
+    }
     @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}.reveal,.section-reveal{opacity:1;transform:none;filter:none}}
   </style>
 </head>
@@ -132,12 +219,19 @@
   <header class="nav" id="nav">
     <div class="container nav-inner">
       <a class="brand" href="#top" aria-label="Setor Plast - início">
-        <img class="brand-logo" src="assets/setor-logo.svg" alt="Setor Plast">
+        <img class="brand-logo brand-logo-light" src="assets/setor-logo.svg" alt="Setor Plast">
+        <img class="brand-logo brand-logo-dark" src="assets/setor-logo-dark.svg" alt="" aria-hidden="true">
       </a>
       <nav class="nav-links" aria-label="Navegação principal">
         <a href="#produtos">Produtos</a><a href="#personalizacao">Personalização</a><a href="#producao">Produção</a><a href="#localizacao">Localização</a><a href="#empresa">Empresa</a><a href="https://www.instagram.com/setorplast/" target="_blank" rel="noopener">Instagram ↗</a>
       </nav>
-      <a class="btn btn-primary" href="https://wa.me/5581998383281?text=Olá%20Setor%20Plast,%20quero%20solicitar%20um%20orçamento." target="_blank" rel="noopener">Solicitar orçamento ↗</a>
+      <div class="nav-actions">
+        <button class="theme-toggle" type="button" id="themeToggle" aria-label="Ativar tema escuro" aria-pressed="false" title="Ativar tema escuro">
+          <svg class="theme-icon theme-moon" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.985 12.486A9 9 0 0 1 11.514 3.015 9 9 0 1 0 20.985 12.486Z"/></svg>
+          <svg class="theme-icon theme-sun" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>
+        </button>
+        <a class="btn btn-primary nav-cta" href="https://wa.me/5581998383281?text=Olá%20Setor%20Plast,%20quero%20solicitar%20um%20orçamento." target="_blank" rel="noopener" aria-label="Solicitar orçamento pelo WhatsApp"><span class="nav-cta-full">Solicitar orçamento ↗</span><span class="nav-cta-short">Orçamento ↗</span></a>
+      </div>
     </div>
   </header>
   <main id="top">
@@ -267,10 +361,26 @@
     </section>
   </main>
   <footer>
-    <div class="container footer-inner"><div><div class="footer-brand">SETOR PLAST</div><div>Embalagens plásticas transparentes e personalizadas.</div></div><div>Caruaru • Pernambuco<br><a href="https://wa.me/5581998383281?text=Olá%20Setor%20Plast,%20quero%20falar%20com%20vocês." target="_blank" rel="noopener" style="color:#101828">WhatsApp: (81) 99838-3281 ↗</a><br><a href="https://www.instagram.com/setorplast/" target="_blank" rel="noopener" style="color:#101828">Instagram: @setorplast ↗</a></div></div>
+    <div class="container footer-inner"><div><div class="footer-brand">SETOR PLAST</div><div>Embalagens plásticas transparentes e personalizadas.</div></div><div>Caruaru • Pernambuco<br><a href="https://wa.me/5581998383281?text=Olá%20Setor%20Plast,%20quero%20falar%20com%20vocês." target="_blank" rel="noopener" class="footer-link">WhatsApp: (81) 99838-3281 ↗</a><br><a href="https://www.instagram.com/setorplast/" target="_blank" rel="noopener" class="footer-link">Instagram: @setorplast ↗</a></div></div>
   </footer>
   <a class="whatsapp" href="https://wa.me/5581998383281?text=Olá%20Setor%20Plast,%20quero%20um%20orçamento." target="_blank" rel="noopener" aria-label="Falar com a Setor Plast no WhatsApp">WA</a>
   <script>
+    const themeToggle=document.getElementById('themeToggle');
+    function applyTheme(theme){
+      const dark=theme==='dark';
+      document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+      themeToggle.setAttribute('aria-pressed',String(dark));
+      themeToggle.setAttribute('aria-label',dark?'Ativar tema claro':'Ativar tema escuro');
+      themeToggle.title=dark?'Ativar tema claro':'Ativar tema escuro';
+      document.querySelector('meta[name="theme-color"]').setAttribute('content',dark?'#0b1220':'#ffffff');
+    }
+    applyTheme(document.documentElement.getAttribute('data-theme')==='dark'?'dark':'light');
+    themeToggle.addEventListener('click',()=>{
+      const next=document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark';
+      applyTheme(next);
+      try{localStorage.setItem('setorplast-theme',next);}catch(_){}
+    });
+
     const nav=document.getElementById('nav');
     const onScroll=()=>nav.classList.toggle('scrolled',scrollY>28);
     onScroll();
